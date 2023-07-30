@@ -1,6 +1,6 @@
 //import moment from 'moment'
-import LibConfig from '../../lib/LibConfig'
-import HttpCommon from '../../lib/HttpCommon';
+import LibConfig from '$lib/LibConfig'
+import HttpCommon from '$lib/HttpCommon';
 
 //
 const LibChat = {

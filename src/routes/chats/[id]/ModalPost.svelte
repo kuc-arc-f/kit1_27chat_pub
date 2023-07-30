@@ -62,7 +62,7 @@ const getThread = async function () : Promise<void>
 {
   try {
     threadItems = await Thread.getItems(post_id);
-//console.log(threadItems);    
+console.log(threadItems);    
   } catch (e) {
     console.error(e);
     alert("Error, getThread");
@@ -80,7 +80,7 @@ const createReply = async function () : Promise<void>
     const body = document.querySelector<HTMLInputElement>('#modal_reply_body');
     const bodyString = body?.value;
 //console.log(post_id, bodyString, chatId, postUserId);
-    await Thread.create(post_id, bodyString, chatId, postUserId);
+    await Thread.create(post_id, bodyString, chatId, LibAuth.getUserId());
     await getThread();
     //@ts-ignore
     body.value = "";
@@ -98,10 +98,8 @@ const createReply = async function () : Promise<void>
 const childDeleteItem = async function () : Promise<void>
 {
   try {
-    ////console.log("user.id=", userId);
-console.log("post_id=", post_id);
+    //console.log("user.id=", userId);
 console.log("postUserId=", postUserId);
-//return;
     await ChatPost.delete(post_id);
     //close
     const btn = document.getElementById("modal_close_button");
@@ -112,7 +110,24 @@ console.log("postUserId=", postUserId);
     alert("Error, childDeleteItem");
   }
 }
-
+/**
+* :
+* @param
+*
+* @return Promise<void>
+*/
+const deleteThread = async function (id: number) : Promise<void>
+{
+  try {
+console.log("deleteThread=", id);
+    const result = await Thread.delete(id);
+//console.log(result);
+    await getThread();
+  } catch (e) {
+    console.error(e);
+    alert("Error, deleteThread");
+  }
+}
 </script>
 <!-- CSS -->
 <style>
@@ -146,6 +161,10 @@ console.log("postUserId=", postUserId);
         <div>
           <div class="thread_user_name">
             <span class="fs-5">{item.user_name}: </span>{item.createdAt}
+            <button class="mt-2 btn btn-sm btn-outline-secondary mx-2"
+            on:click={() => deleteThread(item.thread_id)} >
+              <i class="bi bi-trash-fill"></i>
+            </button>
           </div>
           
           <p>{@html LibCommon.replaceBrString(item.body)}</p>

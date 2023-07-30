@@ -12,6 +12,7 @@ import LibDbSession from '$lib/LibDbSession';
 //import LibNotify from '$lib/LibNotify';
 //import LibCookie from '$lib/LibCookie';
 import ChatPost from '../ChatPost';
+import Chat from '../Chat';
 import ModalPost from './ModalPost.svelte';
 //
 const postCfg= LibChatPost.get_params()
@@ -22,7 +23,7 @@ const chatParams = {
   REMAIN_TIME : 0,
 }
 /** @type {import('./$types').PageData} */
-export let data: any, chat_posts: any[] = [], DATA = chatParams,
+export let data: any, chat_posts: any[] = [], DATA = chatParams, chat: any = {id: 0, name:""},
 post_id = 0, modal_display = false, mTimeoutId: any = 0, user:any = {}, lastCreateTime: string = "";
 let id = 0;
 let items = [];
@@ -48,8 +49,15 @@ console.log(items);
     }    
 }
 const startProc= async function() {
-	items = data.items;
-	console.log(items);
+    try{
+        items = data.items;
+        console.log(items);
+        const chatData = await Chat.get(Number(id));
+        chat = chatData;
+console.log(chatData);
+    } catch (e) {
+    console.error(e);
+    }
 }
 startProc();
 /**
@@ -101,8 +109,8 @@ console.log("parentShow=", id)
 </style>
 
 <!-- MarkUp -->
-<div class="container my-2">
-    <h1>{data.id}</h1>
+<div class="container my-0">
+    <h1>{chat.name}</h1>
     ID: {data.id}
     <hr class="my-1" />
     <div class="row">
