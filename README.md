@@ -6,12 +6,17 @@
 
  date    : 2023/07/30
 
- update  :
+ update  : 2023/07/30
  
 ***
 ### Summary
 
 SvelteKit + Cloudflare D1, chat app sample
+
+***
+### API Server
+
+https://github.com/kuc-arc-f/d1-project7chat
 
 ***
 ### Setup
