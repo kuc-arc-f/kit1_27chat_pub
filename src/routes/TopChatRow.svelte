@@ -9,6 +9,7 @@ export let data: any, chatData: any = {id: 0, name: ""};
 const initPage = async function(): Promise<any>
 {
 	try {
+		/*
 		const key = LibConfig.COOKIE_KEY_LAST_CHAT;
 		const chatId = LibCookie.getCookie(key);
 		if(chatId !== null){
@@ -16,6 +17,7 @@ const initPage = async function(): Promise<any>
 console.log(chatData);
 		}         
 console.log("chatId", chatId);
+		*/
 	} catch (e) {
 		console.error(e);
 	}

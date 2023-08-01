@@ -1,11 +1,15 @@
 <script lang="ts">
 import TopChatRow from './TopChatRow.svelte';
-
+import LibAuth from '$lib/LibAuth';
+const uid = LibAuth.getUserId();
+console.log("uid=", uid);
 </script>
 
-
-<hr />
-<TopChatRow></TopChatRow>
+<!-- MarkUp -->
+<div class="container">
+    <p>UserId: {uid}</p>
+    <TopChatRow></TopChatRow>
+</div>
 
 <!--
 <hr />

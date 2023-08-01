@@ -1,6 +1,6 @@
 import LibCookie from '$lib/LibCookie';
 import LibConfig from '$lib/LibConfig';
-
+export const ssr = false;
 //
 export async function load({ params, url }) {
 //console.log("#+layout.ts");
