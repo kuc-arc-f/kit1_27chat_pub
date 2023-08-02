@@ -8,12 +8,10 @@ import LibConfig from '$lib/LibConfig';
 import LibCommon from '$lib/LibCommon';
 import LibChatPost from '$lib/LibChatPost';
 import LibDbSession from '$lib/LibDbSession';
-//import LibTimer from '$lib/LibTimer';
-//import LibNotify from '$lib/LibNotify';
-//import LibCookie from '$lib/LibCookie';
-import ChatPost from '../ChatPost';
-import Chat from '../Chat';
-import ModalPost from './ModalPost.svelte';
+import ChatPost from '../../chats/ChatPost';
+import Chat from '../../chats/Chat';
+import Thread from '../../chats/Thread';
+//import ModalPost from './ModalPost.svelte';
 //
 const postCfg= LibChatPost.get_params()
 const chatParams = {
@@ -112,54 +110,27 @@ console.log("parentShow=", id)
 <div class="container my-0">
     <div class="row">
         <div class="col-sm-6">
-            <h1>{chat.name}</h1>
+            <h3>Thread : {chat.name}</h3>
             ID: {data.id}
         </div>
         <div class="col-sm-6 text-center pt-3">
-            <a href={`/thread/${id}`} class="btn btn-outline-primary">Thread</a>
+            <a href={`/chats/${id}`} class="btn btn-outline-primary">Post</a>
         </div>
     </div>
-    <hr class="my-1" />
-    <div class="row">
-        <div class="col-sm-9">
-        <textarea class="form-control" name="body" id="body" rows="3" />
-        </div>
-        <div class="col-sm-3">
-            <button class="mt-2 btn btn-outline-primary" on:click={addItem} >
-            Post</button>
-        </div>
-    </div>
-    <hr class="my-1" />
+    <hr class="my-2" />
     {#each items as item}
     <div>
         <h5>{item.user_name}</h5>
         <hr class="my-1" />
         <p>{@html LibCommon.replaceBrString(item.body)}</p>
-        <p>{LibCommon.converDateString(item.createdAt)}, ID: {item.id}
+        <p>{LibCommon.converDateString(item.createdAt)}, ID: {item.thread_id}
         </p>
-        <button on:click={parentShow(item.id)}
-        class="btn btn-sm btn-outline-primary">Show</button>
         <hr />
     </div>
     {/each}  
-    <!-- Modal -->
-    <div class="chat_show_modal_wrap">
-        <button type="button" class="btn btn-primary" id="open_post_show"
-        data-bs-toggle="modal" data-bs-target="#exampleModal">Launch demo modal
-       </button>
-        <div class="modal fade" id="exampleModal" tabindex="-1"
-          aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    {#if modal_display}
-                    <ModalPost post_id={post_id} parentGetList={parentGetList} />
-                    {/if}
-                </div>
-            </div>
-        </div>    
-    </div>
 </div>
 
 <!--
-
+<button on:click={parentShow(item.id)}
+class="btn btn-sm btn-outline-primary">Show</button>
 --->

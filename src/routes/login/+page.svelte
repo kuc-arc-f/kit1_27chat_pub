@@ -61,7 +61,7 @@ console.log(resulte);
 </script>
 
 <!-- MarkUp -->
-<div class="text-column">
+<div class="container text-column">
     <h1>Login</h1>
     <div class="form-group col-sm-6">
         <label>Email:

@@ -31,7 +31,7 @@ console.log(result);
 </script>
 
 <!-- MarkUp -->
-<div class="text-column">
+<div class="container text-column">
 	<h1>User Create</h1>
 	<hr />
 	<div class="form-group col-sm-6">

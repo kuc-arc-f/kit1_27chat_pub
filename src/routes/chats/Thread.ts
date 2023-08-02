@@ -26,6 +26,27 @@ const Thread = {
    }
   },
   /**
+  * getChatItems : chat単位リスト
+  * @param chatId: number
+  *
+  * @return
+  */   
+  getChatItems : async function (chatId: number): Promise<any>
+  {
+   try{
+     const item = {
+      chatId: chatId,
+     }      
+     const json = await HttpCommon.server_post(item, "/threads/get_list_chat");
+//console.log(json);
+     return json.data;
+   } catch (e) {
+     console.error(e);
+     throw new Error('Error, getChatItems');
+   }
+  },
+ 
+  /**
   * create
   * @param chatPostId: number
   *
