@@ -2,28 +2,25 @@
 import { page } from '$app/stores';
 import LibCookie from '$lib/LibCookie';
 import LibConfig from '$lib/LibConfig';
-import LibChat from '$lib/LibChat';
+//import LibChat from '$lib/LibChat';
+import Chat from './chats/Chat';
 
 export let data: any, chatData: any = {id: 0, name: ""};
 //
 const initPage = async function(): Promise<any>
 {
 	try {
-		/*
 		const key = LibConfig.COOKIE_KEY_LAST_CHAT;
 		const chatId = LibCookie.getCookie(key);
 		if(chatId !== null){
-			chatData = await LibChat.get(Number(chatId));
-console.log(chatData);
+			chatData = await Chat.get(Number(chatId));
+//console.log(chatData);
 		}         
-console.log("chatId", chatId);
-		*/
 	} catch (e) {
 		console.error(e);
 	}
 }
 initPage();
-///chats/49
 </script>
 
 <!-- MarkUp -->

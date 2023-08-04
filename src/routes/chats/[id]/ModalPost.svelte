@@ -7,8 +7,8 @@
 import LibDbSession from '$lib/LibDbSession';
 import PostCommon from '../PostCommon';
 import LibAuth from '$lib/LibAuth';
-//import LibChatPost from '$lib/LibChatPost';
 import ChatPost from '../ChatPost';
+import BookMark from '../BookMark';
 import LibConfig from '$lib/LibConfig';
 import LibCommon from '$lib/LibCommon';
 import Thread from '../Thread';
@@ -111,6 +111,23 @@ console.log("postUserId=", postUserId);
   }
 }
 /**
+*
+* @param
+*
+* @return Promise<void>
+*/
+const addBookMark = async function () : Promise<void>
+{
+  try {
+console.log("postUserId=", postUserId);
+    await BookMark.create(post_id, chatId, userId);
+  } catch (e) {
+    console.error(e);
+    alert("Error, addBookMark");
+  }
+}
+
+/**
 * :
 * @param
 *
@@ -173,6 +190,8 @@ console.log("deleteThread=", id);
         {/each}     
     </div>
     <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" on:click={() => addBookMark()}
+        >BookMark</button>            
         {#if (postUserId === userId)}
           <button type="button" class="btn btn-outline-danger" id="modal_post_btn_delete"
           on:click={() => childDeleteItem()}

@@ -23,23 +23,30 @@ startProc();
 </script>
 
 <div class="container my-2">
-	<h1>Chat</h1>
-	<hr />
-	<a href={`/chats/create`} class="btn btn-primary">Create
-	</a>
-  
+    <div class="row">
+        <div class="col-sm-6"><h1>Chat</h1>
+        </div>
+        <div class="col-sm-6 text-end pt-3">
+			<a href={`/chats/create`} class="btn btn-primary">Create
+			</a>		
+        </div>
+    </div>
 	<hr />
 	{#each items as item}
 	<div>
-		<h3>{item.name}</h3>
+		<a href={`/chats/${item.id}`} class=""><h3>{item.name}</h3>
+		</a>		
 		<p>ID : {item.id}</p>
 		<a href={`/chats/${item.id}`} class="btn btn-outline-primary">Show
+		</a>		
+		<a href={`/thread/${item.id}`} class="btn btn-outline-primary mx-2">Thread
+		</a>		
+		<a href={`/bookmark/${item.id}`} class="btn btn-outline-primary">Bookmark
 		</a>		
 		<hr />
 	</div>
 	{/each}	
 </div>
 <!-- 
-<a href={`/chats/edit/${item.id}`} class="btn">[ Edit ]
-</a>		
+<h3>{item.name}</h3>
 -->
