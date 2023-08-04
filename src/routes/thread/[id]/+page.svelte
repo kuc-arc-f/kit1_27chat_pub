@@ -11,7 +11,7 @@ import LibDbSession from '$lib/LibDbSession';
 import ChatPost from '../../chats/ChatPost';
 import Chat from '../../chats/Chat';
 import Thread from '../../chats/Thread';
-//import ModalPost from './ModalPost.svelte';
+import ModalPost from './ModalPost.svelte';
 //
 const postCfg= LibChatPost.get_params()
 const chatParams = {
@@ -80,7 +80,7 @@ startProc();
  *
  * @return
  */
- const parentShow = function (id: number)
+const parentShow = function (id: number)
 {
     try {
 console.log("parentShow=", id)
@@ -124,10 +124,28 @@ console.log("parentShow=", id)
         <hr class="my-1" />
         <p>{@html LibCommon.replaceBrString(item.body)}</p>
         <p>{LibCommon.converDateString(item.createdAt)}, ID: {item.thread_id}
+        <button on:click={parentShow(item.chatPostId)}
+        class="btn btn-sm btn-outline-primary mx-2">More</button>        
         </p>
         <hr />
     </div>
-    {/each}  
+    {/each}
+    <!-- Modal -->
+    <div class="chat_show_modal_wrap">
+        <button type="button" class="btn btn-primary" id="open_post_show"
+        data-bs-toggle="modal" data-bs-target="#exampleModal">Launch demo modal
+       </button>
+        <div class="modal fade" id="exampleModal" tabindex="-1"
+          aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    {#if modal_display}
+                    <ModalPost post_id={post_id} parentGetList={parentGetList} />
+                    {/if}
+                </div>
+            </div>
+        </div> 
+    </div>    
 </div>
 
 <!--

@@ -116,7 +116,8 @@ console.log("deleteBookmark=" , bookmark_id);
         <hr class="my-1" />
         <p>{@html LibCommon.replaceBrString(item.body)}</p>
         <p>{LibCommon.converDateString(item.createdAt)}, ID: {item.bookmark_id}
-        <button class="btn btn-sm btn-outline-primary mx-2" on:click={deleteBookmark(item.bookmark_id)}>Delete</button>
+        <button class="btn btn-sm btn-outline-danger mx-2" on:click={deleteBookmark(item.bookmark_id)}
+        >Delete</button>
         </p>
         <hr />
     </div>
