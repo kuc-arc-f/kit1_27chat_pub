@@ -11,14 +11,15 @@ const BookMark = {
   *
   * @return
   */   
-  getItems : async function (chatId: number): Promise<any>
+  getItems : async function (chatId: number, userId: number): Promise<any>
   {
    try{
      const item = {
       chatId: chatId,
+      userId: userId,
      }      
      const json = await HttpCommon.server_post(item, "/bookmark/get_list");
-//console.log(json);
+console.log(json);
      return json.data;
    } catch (e) {
      console.error(e);

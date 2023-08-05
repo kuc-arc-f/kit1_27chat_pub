@@ -133,5 +133,29 @@ console.log(items);
       throw new Error('error, getLastTime');
     }
    },
+  /**
+  * 
+  * @param chatId: number
+  *
+  * @return Promise
+  */       
+  get : async function (chatId: number): Promise<any>
+  {
+    try {
+      let ret = {};
+      const item = {
+        id: chatId,
+      }
+      const json = await HttpCommon.server_post(item, "/chat_posts/get");
+//console.log(json);
+      if(json.ret === LibConfig.OK_CODE) {
+        ret = json.data;
+      }
+      return ret;       
+    } catch (e) {
+      console.log(e);
+      throw new Error('error, get');
+    }
+   },
 }
 export default ChatPost;

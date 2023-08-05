@@ -7,7 +7,8 @@
 import LibConfig from '$lib/LibConfig';
 import LibCommon from '$lib/LibCommon';
 import LibChatPost from '$lib/LibChatPost';
-import LibDbSession from '$lib/LibDbSession';
+//import LibDbSession from '$lib/LibDbSession'
+import LibAuth from '$lib/LibAuth';;
 import ChatPost from '../../chats/ChatPost';
 import Chat from '../../chats/Chat';
 import Thread from '../../chats/Thread';
@@ -24,10 +25,12 @@ const chatParams = {
 /** @type {import('./$types').PageData} */
 export let data: any, chat_posts: any[] = [], DATA = chatParams, chat: any = {id: 0, name:""},
 post_id = 0, modal_display = false, mTimeoutId: any = 0, user:any = {}, lastCreateTime: string = "";
-let id = 0;
+let id = 0, userId = 0;
 let items = [];
+userId = LibAuth.getUserId();
 //
 console.log("[id]start.id=", data.id);
+console.log("userId=", userId);
 id = Number(data.id);
 //console.log(data);
 /**
@@ -48,9 +51,9 @@ console.log(items);
     }    
 }
 //
-const startProc= async function() {
+const startProc = async function() {
     try{
-        items = data.items;
+        items = await BookMark.getItems(id , userId);
         console.log(items);
         const chatData = await Chat.get(Number(id));
         chat = chatData;
@@ -86,7 +89,7 @@ const deleteBookmark = async function (bookmark_id: number) {
     try {
 console.log("deleteBookmark=" , bookmark_id);
         await BookMark.delete(bookmark_id);
-        items = await BookMark.getItems(id);
+        items = await BookMark.getItems(id, userId);
     } catch (e) {
         console.error(e);
     }    
@@ -126,7 +129,7 @@ console.log("parentShow=", id)
 <div class="container my-0">
     <div class="row">
         <div class="col-sm-6">
-            <h3>BookMark22 : {chat.name}</h3>
+            <h3>BookMark: {chat.name}</h3>
             ID: {data.id}
         </div>
         <div class="col-sm-6 text-center pt-3">

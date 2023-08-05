@@ -30,10 +30,10 @@ const getItem = async function(id: number) {
 export async function load({ params }) {
   try{
     console.log("id=", params.id);
-    const items: any[] = await getItem(params.id);
+    //const items: any[] = await getItem(params.id);
     return {
         id: params.id,
-        items: items,
+        items: [],
     };  
   } catch (e) {
     console.error(e);

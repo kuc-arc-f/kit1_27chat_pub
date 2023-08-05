@@ -4,7 +4,7 @@
 </svelte:head>
 
 <script lang="ts">
-import LibDbSession from '$lib/LibDbSession';
+//import LibDbSession from '$lib/LibDbSession';
 import PostCommon from '../PostCommon';
 import LibAuth from '$lib/LibAuth';
 import ChatPost from '../ChatPost';
@@ -27,29 +27,21 @@ console.log("post_id=", post_id);
 * @return
 */   
 const loadProc = async function () {
-  try {
-console.log("#loadProc.id=", post_id);
-    userId = LibAuth.getUserId();
-//console.log("user.id=", userId);
-    const posts = await LibDbSession.get(LibConfig.SESSION_KEY_CHAT_POST);
-//console.log(posts);
-    let result = posts.filter(post => post.id === post_id);
-console.log(result);
-    if(result.length > 0) {
-      const item = result[0];
-      post_body = item.body;
-      postUserName = item.user_name;
-      postUserId = item.userId;
-//console.log(item);
-//console.log("postUserId=", postUserId);
-      chatId = item.chatId;
-      dateStr = LibCommon.converDatetimeString(item.createdAt);
-      //Thread
-      await getThread();
-    }
-  } catch (e) {
-    console.error(e);
-  }  
+    try {
+    console.log("#loadProc.id=", post_id);
+        userId = LibAuth.getUserId();
+        let item = await ChatPost.get(Number(post_id));
+console.log(item);
+        post_body = item.body;
+        postUserName = item.user_name;
+        postUserId = item.userId;
+        chatId = item.chatId;
+        dateStr = LibCommon.converDatetimeString(item.createdAt);
+        //
+        await getThread();
+    } catch (e) {
+        console.error(e);
+    }  
 }
 loadProc();
  /**
@@ -121,6 +113,7 @@ const addBookMark = async function () : Promise<void>
   try {
 console.log("postUserId=", postUserId);
     await BookMark.create(post_id, chatId, userId);
+    alert("Success, save");
   } catch (e) {
     console.error(e);
     alert("Error, addBookMark");

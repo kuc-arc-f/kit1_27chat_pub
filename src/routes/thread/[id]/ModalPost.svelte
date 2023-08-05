@@ -5,10 +5,8 @@
 
 <script lang="ts">
 import LibDbSession from '$lib/LibDbSession';
-//import PostCommon from '../PostCommon';
 import LibAuth from '$lib/LibAuth';
 import ChatPost from '../../chats/ChatPost';
-//import BookMark from '../BookMark';
 import LibConfig from '$lib/LibConfig';
 import LibCommon from '$lib/LibCommon';
 import Thread from '../../chats/Thread';
@@ -27,29 +25,21 @@ console.log("post_id=", post_id);
 * @return
 */   
 const loadProc = async function () {
-  try {
+    try {
 console.log("#loadProc.id=", post_id);
-    userId = LibAuth.getUserId();
-//console.log("user.id=", userId);
-    const posts = await LibDbSession.get(LibConfig.SESSION_KEY_CHAT_POST);
-//console.log(posts);
-    let result = posts.filter(post => post.id === post_id);
-console.log(result);
-    if(result.length > 0) {
-      const item = result[0];
-      post_body = item.body;
-      postUserName = item.user_name;
-      postUserId = item.userId;
-//console.log(item);
-//console.log("postUserId=", postUserId);
-      chatId = item.chatId;
-      dateStr = LibCommon.converDatetimeString(item.createdAt);
-      //Thread
-      await getThread();
-    }
-  } catch (e) {
-    console.error(e);
-  }  
+        userId = LibAuth.getUserId();
+        let item = await ChatPost.get(Number(post_id));
+console.log(item);
+        post_body = item.body;
+        postUserName = item.user_name;
+        postUserId = item.userId;
+        chatId = item.chatId;
+        dateStr = LibCommon.converDatetimeString(item.createdAt);
+        //
+        await getThread();    
+    } catch (e) {
+        console.error(e);
+    }  
 }
 loadProc();
  /**
