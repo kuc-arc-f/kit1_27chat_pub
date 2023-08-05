@@ -12,7 +12,7 @@ import ChatPost from '../../chats/ChatPost';
 import Chat from '../../chats/Chat';
 import Thread from '../../chats/Thread';
 import BookMark from '../../chats/BookMark';
-//import ModalPost from './ModalPost.svelte';
+import ModalPost from './ModalPost.svelte';
 //
 const postCfg= LibChatPost.get_params()
 const chatParams = {
@@ -91,6 +91,30 @@ console.log("deleteBookmark=" , bookmark_id);
         console.error(e);
     }    
 }
+/**
+ * parentShow
+ * @param
+ *
+ * @return
+ */
+ const parentShow = function (id: number)
+{
+    try {
+console.log("parentShow=", id)
+        post_id = id;
+        modal_display = false;
+        const timer = 100;
+        setTimeout(() => {
+            console.log("parentShow=", id);
+            modal_display = true;
+            const btn = document.getElementById("open_post_show");
+            btn?.click();
+        }
+        , timer);
+    } catch (e) {
+        console.log(e);
+    }
+}
 </script>
 
 <!-- CSS -->
@@ -102,13 +126,13 @@ console.log("deleteBookmark=" , bookmark_id);
 <div class="container my-0">
     <div class="row">
         <div class="col-sm-6">
-            <h3>BookMark : {chat.name}</h3>
+            <h3>BookMark22 : {chat.name}</h3>
             ID: {data.id}
         </div>
         <div class="col-sm-6 text-center pt-3">
             <a href={`/chats/${id}`} class="btn btn-outline-primary">Post</a>
         </div>
-    </div>
+    </div> 
     <hr class="my-2" />
     {#each items as item}
     <div>
@@ -118,10 +142,28 @@ console.log("deleteBookmark=" , bookmark_id);
         <p>{LibCommon.converDateString(item.createdAt)}, ID: {item.bookmark_id}
         <button class="btn btn-sm btn-outline-danger mx-2" on:click={deleteBookmark(item.bookmark_id)}
         >Delete</button>
+        <button on:click={parentShow(item.chatPostId)}
+        class="btn btn-sm btn-outline-primary">Show</button>        
         </p>
         <hr />
     </div>
-    {/each}  
+    {/each}
+    <!-- Modal -->
+    <div class="chat_show_modal_wrap">
+        <button type="button" class="btn btn-primary" id="open_post_show"
+        data-bs-toggle="modal" data-bs-target="#exampleModal">Launch demo modal
+       </button>
+        <div class="modal fade" id="exampleModal" tabindex="-1"
+          aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    {#if modal_display}
+                    <ModalPost post_id={post_id} parentGetList={parentGetList} />
+                    {/if}
+                </div>
+            </div>
+        </div>    
+    </div>      
 </div>
 
 <!--
