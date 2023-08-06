@@ -34,9 +34,6 @@ export async function load({ params }) {
     return {
         id: params.id,
         items: items,
-//        validLogin: validLogin,
-//        user: user,
-//        lastCreateTime: lastCreateTime,
     };  
   } catch (e) {
     console.error(e);

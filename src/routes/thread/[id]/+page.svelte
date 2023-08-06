@@ -10,8 +10,10 @@ import LibChatPost from '$lib/LibChatPost';
 import LibDbSession from '$lib/LibDbSession';
 import ChatPost from '../../chats/ChatPost';
 import Chat from '../../chats/Chat';
+import CrudIndex from '../CrudIndex';
 import Thread from '../../chats/Thread';
 import ModalPost from './ModalPost.svelte';
+import PaginateBox from '$lib/components/PaginateBox.svelte';
 //
 const postCfg= LibChatPost.get_params()
 const chatParams = {
@@ -24,7 +26,7 @@ const chatParams = {
 export let data: any, chat_posts: any[] = [], DATA = chatParams, chat: any = {id: 0, name:""},
 post_id = 0, modal_display = false, mTimeoutId: any = 0, user:any = {}, lastCreateTime: string = "";
 let id = 0;
-let items = [];
+let items = [], itemPage = 1, itemsAll = [], perPage: number = 100;
 //
 console.log("[id]start.id=", data.id);
 id = Number(data.id);
@@ -48,11 +50,12 @@ console.log(items);
 }
 const startProc= async function() {
     try{
-        items = data.items;
-        console.log(items);
+        itemsAll = data.items;
+        items = await CrudIndex.getPageList(itemsAll, itemPage, perPage);
+console.log(items);
         const chatData = await Chat.get(Number(id));
         chat = chatData;
-console.log(chatData);
+//console.log(chatData);
     } catch (e) {
     console.error(e);
     }
@@ -98,7 +101,18 @@ console.log("parentShow=", id)
         console.log(e);
     }
 }
-
+/**
+*
+* @param
+*
+* @return
+*/ 
+const parentUpdateList = async function(page: number) {
+  console.log("parentUpdateList=", page);
+  itemPage = page;
+  items = await CrudIndex.getPageList(itemsAll, page, perPage);
+  console.log(items);
+}
 </script>
 
 <!-- CSS -->
@@ -107,7 +121,7 @@ console.log("parentShow=", id)
 </style>
 
 <!-- MarkUp -->
-<div class="container my-0">
+<div class="container pb-4 mb-4">
     <div class="row">
         <div class="col-sm-6">
             <h3>Thread : {chat.name}</h3>
@@ -130,6 +144,7 @@ console.log("parentShow=", id)
         <hr />
     </div>
     {/each}
+    <PaginateBox  itemPage={itemPage} parentUpdateList={parentUpdateList} />
     <!-- Modal -->
     <div class="chat_show_modal_wrap">
         <button type="button" class="btn btn-primary" id="open_post_show"
