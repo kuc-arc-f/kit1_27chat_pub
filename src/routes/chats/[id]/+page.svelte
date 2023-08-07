@@ -8,12 +8,14 @@ import LibConfig from '$lib/LibConfig';
 import LibCommon from '$lib/LibCommon';
 import LibChatPost from '$lib/LibChatPost';
 import LibDbSession from '$lib/LibDbSession';
+import CrudIndex from '../CrudIndex';
 //import LibTimer from '$lib/LibTimer';
 //import LibNotify from '$lib/LibNotify';
 import LibCookie from '$lib/LibCookie';
 import ChatPost from '../ChatPost';
 import Chat from '../Chat';
 import ModalPost from './ModalPost.svelte';
+import PaginateBox from '$lib/components/PaginateBox.svelte';
 //
 const postCfg= LibChatPost.get_params()
 const chatParams = {
@@ -26,7 +28,7 @@ const chatParams = {
 export let data: any, chat_posts: any[] = [], DATA = chatParams, chat: any = {id: 0, name:""},
 post_id = 0, modal_display = false, mTimeoutId: any = 0, user:any = {}, lastCreateTime: string = "";
 let id = 0;
-let items = [];
+let items = [], itemsAll = [], itemPage = 1, perPage: number = 100;
 //
 console.log("[id]start.id=", data.id);
 id = Number(data.id);
@@ -49,6 +51,44 @@ console.log(items);
     }    
 }
 /**
+ * clickClear
+ * @param
+ *
+ * @return
+ */
+const clickClear = async function() {
+    try{
+        const searchKey = document.querySelector<HTMLInputElement>('#searchKey');
+        // @ts-ignore
+        if(searchKey) {
+            searchKey.value = "";
+        }
+        items = await ChatPost.getList(id);
+    } catch (e) {
+        console.error(e);
+        throw new Error('Error , clickClear');
+    }    
+}
+/**
+*
+* @param
+*
+* @return
+*/
+async function clickSearch(){
+    try {
+        const searchKey = document.querySelector<HTMLInputElement>('#searchKey');
+        const skey = searchKey?.value;
+console.log("search:", skey);
+        //@ts-ignore
+        items = await ChatPost.search(id, skey);
+//console.log(items);
+        chat_posts = items;
+    } catch (error) {
+        console.error(error);
+    }    
+}
+/**
 *
 * @param
 *
@@ -58,7 +98,8 @@ const startProc= async function() {
     try{
         const key = LibConfig.COOKIE_KEY_LAST_CHAT;
         LibCookie.setCookie(key, String(id));
-        items = data.items;
+        itemsAll = data.items;
+        items = await CrudIndex.getPageList(itemsAll, itemPage, perPage);
         console.log(items);
         const chatData = await Chat.get(Number(id));
         chat = chatData;
@@ -108,7 +149,18 @@ console.log("parentShow=", id)
         console.log(e);
     }
 }
-
+/**
+*
+* @param
+*
+* @return
+*/ 
+const parentUpdateList = async function(page: number) {
+  console.log("parentUpdateList=", page);
+  itemPage = page;
+  items = await CrudIndex.getPageList(itemsAll, page, perPage);
+  console.log(items);
+}
 </script>
 
 <!-- CSS -->
@@ -139,6 +191,18 @@ console.log("parentShow=", id)
         </div>
     </div>
     <hr class="my-1" />
+    <div class="row">
+        <div class="col-md-12 pt-1">
+            <button class="btn btn-sm btn-outline-primary" on:click={() => clickClear()} 
+            >Clear</button>
+            <span class="search_key_wrap">
+                <input type="text" size="36" class="mx-2 " name="searchKey"
+                 id="searchKey" placeholder="Search Key">
+            </span>
+            <button class="btn btn-sm btn-outline-primary" on:click={() => clickSearch()}>Search</button>
+        </div>
+    </div>
+    <hr class="my-1" />
     {#each items as item}
     <div>
         <h5>{item.user_name}</h5>
@@ -150,7 +214,9 @@ console.log("parentShow=", id)
         class="btn btn-sm btn-outline-primary">Show</button>
         <hr />
     </div>
-    {/each}  
+    {/each} 
+    <!-- paginate -->
+    <PaginateBox  itemPage={itemPage} parentUpdateList={parentUpdateList} /> 
     <!-- Modal -->
     <div class="chat_show_modal_wrap">
         <button type="button" class="btn btn-primary" id="open_post_show"

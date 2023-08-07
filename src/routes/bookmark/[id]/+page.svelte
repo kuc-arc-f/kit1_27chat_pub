@@ -12,8 +12,10 @@ import LibAuth from '$lib/LibAuth';;
 import ChatPost from '../../chats/ChatPost';
 import Chat from '../../chats/Chat';
 import Thread from '../../chats/Thread';
+import CrudIndex from '../CrudIndex';
 import BookMark from '../../chats/BookMark';
 import ModalPost from './ModalPost.svelte';
+import PaginateBox from '$lib/components/PaginateBox.svelte';
 //
 const postCfg= LibChatPost.get_params()
 const chatParams = {
@@ -26,7 +28,7 @@ const chatParams = {
 export let data: any, chat_posts: any[] = [], DATA = chatParams, chat: any = {id: 0, name:""},
 post_id = 0, modal_display = false, mTimeoutId: any = 0, user:any = {}, lastCreateTime: string = "";
 let id = 0, userId = 0;
-let items = [];
+let items = [] ,itemPage = 1, itemsAll = [], perPage: number = 100;
 userId = LibAuth.getUserId();
 //
 console.log("[id]start.id=", data.id);
@@ -53,8 +55,9 @@ console.log(items);
 //
 const startProc = async function() {
     try{
-        items = await BookMark.getItems(id , userId);
-        console.log(items);
+        itemsAll = await BookMark.getItems(id , userId);
+        items = await CrudIndex.getPageList(itemsAll, itemPage, perPage);
+console.log(items);
         const chatData = await Chat.get(Number(id));
         chat = chatData;
 console.log(chatData);
@@ -78,6 +81,18 @@ startProc();
     } catch (e) {
         console.error(e);
     }    
+}
+/**
+*
+* @param
+*
+* @return
+*/ 
+const parentUpdateList = async function(page: number) {
+  console.log("parentUpdateList=", page);
+  itemPage = page;
+  items = await CrudIndex.getPageList(itemsAll, page, perPage);
+  console.log(items);
 }
 /**
  *
@@ -151,6 +166,8 @@ console.log("parentShow=", id)
         <hr />
     </div>
     {/each}
+    <!-- PaginateBox -->
+    <PaginateBox  itemPage={itemPage} parentUpdateList={parentUpdateList} />
     <!-- Modal -->
     <div class="chat_show_modal_wrap">
         <button type="button" class="btn btn-primary" id="open_post_show"
