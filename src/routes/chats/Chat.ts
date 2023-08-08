@@ -28,6 +28,27 @@ const LibChat = {
       console.error(e);
       throw new Error('Error , get');
     }    
-  },  
+  }, 
+  /**
+  *
+  * @param
+  *
+  * @return
+  */
+  search: async function(searchKey: string): Promise<any>
+  {
+    try {
+        let items = [];
+        const item = {
+          seachKey : searchKey,
+        }
+        const json = await HttpCommon.server_post(item, "/chats/search");
+        items = json.data
+console.log(items);	      
+      return items;
+    } catch (e) {
+      console.error(e);
+    }
+  },     
 }
 export default LibChat;
