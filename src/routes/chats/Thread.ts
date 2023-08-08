@@ -93,6 +93,28 @@ const Thread = {
       console.error(e);
       throw new Error('Error, delete');
     }
-   },   
+   }, 
+  /**
+  *
+  * @param
+  *
+  * @return
+  */
+  search: async function(chatId: number, searchKey: string): Promise<any>
+  {
+    try {
+        let items = [];
+        const item = {
+          chatId: chatId,
+          seachKey : searchKey,
+        }
+        const json = await HttpCommon.server_post(item, "/threads/search");
+        items = json.data
+// /console.log(items);	      
+      return items;
+    } catch (e) {
+      console.error(e);
+    }
+  },       
 }
 export default Thread;

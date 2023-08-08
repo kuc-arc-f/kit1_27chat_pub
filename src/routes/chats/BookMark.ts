@@ -91,6 +91,31 @@ console.log(json);
       console.error(e);
       throw new Error('Error, delete');
     }
-   },   
+   },
+  /**
+  *
+  * @param
+  *
+  * @return
+  */
+  search: async function(chatId: number, searchKey: string, userId: number): Promise<any>
+  {
+    try {
+        let items = [];
+        const item = {
+          chatId: chatId,
+          "userId": userId,
+          seachKey : searchKey,
+        }
+// /console.log(items);	      
+
+        const json = await HttpCommon.server_post(item, "/bookmark/search");
+        items = json.data
+// /console.log(items);	      
+      return items;
+    } catch (e) {
+      console.error(e);
+    }
+  },       
 }
 export default BookMark;

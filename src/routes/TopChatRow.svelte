@@ -31,14 +31,25 @@ initPage();
 	<h3>Recent Chat</h3>
 	<hr />
 	{#if recentdisplay}
-	<a class="nav-link active" aria-current="page" href={`/chats/${chatData.id}`}>
+	
 		<span class="task_title fs-5"><h3 class="py-1">{chatData.name}</h3>
 		</span>
 		<span>ID: {chatData.id}</span>
-		<button class="btn btn-sm btn-outline-primary mx-2">Open
-		</button>		
-	</a>
+		<a href={`/chats/${chatData.id}`}>
+			<button class="btn btn-sm btn-outline-primary ms-2">Open
+			</button>		
+		</a>
+		<a href={`/thread/${chatData.id}`}>
+			<button class="btn btn-sm btn-outline-primary mx-2">Thread</button>		
+		</a>
+		<a href={`/bookmark/${chatData.id}`}>
+			<button class="btn btn-sm btn-outline-primary mx-0">Bookmark</button>		
+		</a>
 	<hr />
 	{/if}
 
 </div>
+
+<!--
+<a class="nav-link active" aria-current="page" href={`/chats/${chatData.id}`}>
+-->

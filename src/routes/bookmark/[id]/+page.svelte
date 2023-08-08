@@ -133,6 +133,50 @@ console.log("parentShow=", id)
         console.log(e);
     }
 }
+/**
+ * clickClear
+ * @param
+ *
+ * @return
+ */
+const clickClear = async function() {
+    try{
+        const searchKey = document.querySelector<HTMLInputElement>('#searchKey');
+        // @ts-ignore
+        if(searchKey) {
+            searchKey.value = "";
+        }
+        itemPage = 1;
+        itemsAll = await BookMark.getItems(id , userId);
+        items = await CrudIndex.getPageList(itemsAll, itemPage, perPage);
+console.log(items);
+//        items = await ChatPost.getList(id);
+    } catch (e) {
+        console.error(e);
+        throw new Error('Error , clickClear');
+    }    
+}
+/**
+*
+* @param
+*
+* @return
+*/
+async function clickSearch(){
+    try {
+        const searchKey = document.querySelector<HTMLInputElement>('#searchKey');
+        const skey = searchKey?.value;
+console.log("search:", skey);
+        //@ts-ignore
+        itemPage = 1;
+        itemsAll = await BookMark.search(id, skey, userId);
+        items = await CrudIndex.getPageList(itemsAll, itemPage, perPage);
+console.log(items);
+        chat_posts = items;
+    } catch (error) {
+        console.error(error);
+    }    
+}
 </script>
 
 <!-- CSS -->
@@ -151,6 +195,18 @@ console.log("parentShow=", id)
             <a href={`/chats/${id}`} class="btn btn-outline-primary">Post</a>
         </div>
     </div> 
+    <hr class="my-1" />
+    <div class="row">
+        <div class="col-md-12 pt-1">
+            <button class="btn btn-sm btn-outline-primary" on:click={() => clickClear()} 
+            >Clear</button>
+            <span class="search_key_wrap">
+                <input type="text" size="36" class="form-control-sm mx-2 " name="searchKey"
+                 id="searchKey" placeholder="Search Key">
+            </span>
+            <button class="btn btn-sm btn-outline-primary" on:click={() => clickSearch()}>Search</button>
+        </div>
+    </div>
     <hr class="my-2" />
     {#each items as item}
     <div>
